@@ -13,13 +13,13 @@
     "deploy": "electron-builder build  --win --publish always"
   },
   "build": {
-    "appId":"com.example.button-update",
+    "appId": "com.example.button-update",
     "productName": "button-update",
-    "publish":[
+    "publish": [
       {
-        "provider":"github",
-        "owner":"Letmeouted",
-        "repo":"button-update"
+        "provider": "github",
+        "owner": "Letmeouted",
+        "repo": "button-update"
       }
     ],
     "directories": {
