@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>button-update</title>
+    <script src="node_modules/mdui/dist/js/mdui.min.js"></script>
+    <link rel="stylesheet" href="node_modules/mdui/dist/css/mdui.min.css" />
+  </head>
+  <body class="mdui-theme-primary-orange">
+    <button
+      class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-orange" mdui-dialog="{target: '#update'}"
+    >
+      检查更新
+  </button>
+  <div class="mdui-dialog" id="update">
+    <div class="mdui-dialog-title">检查更新</div>
+    <div class="mdui-dialog-content" id="version"></div>
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+      <button class="mdui-btn mdui-ripple" mdui-dialog-confirm onclick="NewUpdate()">确定</button>
+    </div>
+    <div id="notification" class="hidden">
+        <p id="message"></p>
+        <button id="close-button" onClick="closeNotification()">Close</button>
+        <button id="restart-button" onClick="restartApp()" class="hidden">
+          Restart
+        </button>
+  <script>
+      const { ipcRenderer } = require("electron")
+      const version = document.getElementById("version")
+      ipcRenderer.send("app_version")
+      ipcRenderer.on("app_version", (event, arg) => {
+        console.log("app version checked")
+        ipcRenderer.removeAllListeners("app_version")
+        version.innerText = "当前版本：" + arg.version
+      })
+      function NewUpdate(){
+        const notification = document.getElementById("notification");
+      const message = document.getElementById("message");
+      const restartButton = document.getElementById("restart-button");
+      console.log("Script is running");
+      ipcRenderer.on("update_available", () => {
+        console.log("Update available");
+        ipcRenderer.removeAllListeners("update_available");
+        message.innerText = "A new update is available. Downloading now...";
+        notification.classList.remove("hidden");
+      });
+      ipcRenderer.on("update_downloaded", () => {
+        ipcRenderer.removeAllListeners("update_downloaded");
+        message.innerText =
+          "Update Downloaded. It will be installed on restart. Restart now?";
+        restartButton.classList.remove("hidden");
+        notification.classList.remove("hidden");
+      });
+      function closeNotification() {
+        notification.classList.add("hidden");
+      }
+      function restartApp() {
+        ipcRenderer.send("restart_app");
+      }
+      }
+  </script>
+  </body>
+</html>

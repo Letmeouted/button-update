@@ -1,0 +1,63 @@
+{
+  "name": "button-update",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Letmeouted/button-update.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build  --win --publish never",
+    "deploy": "electron-builder build  --win --publish always"
+  },
+  "build": {
+    "appId":"com.example.button-update",
+    "productName": "button-update",
+    "publish":[
+      {
+        "provider":"github",
+        "owner":"Letmeouted",
+        "repo":"button-update"
+      }
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "dmg": {
+      "title": "button-update",
+      "icon": "build/Icon.icns"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dmg"
+      ],
+      "icon": "icons/Icon.icns",
+      "artifactName": "${productName}.v${version}.MacOS.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron-updater": "^4.3.8",
+    "mdui": "^1.0.2"
+  },
+  "devDependencies": {
+    "electron": "^12.0.1",
+    "electron-builder": "^22.10.5"
+  }
+}
